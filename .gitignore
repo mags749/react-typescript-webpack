@@ -1,0 +1,10 @@
+.vscode/
+npm-debug.log*
+node_modules/
+
+.sourcemaps/
+.sass-cache/
+coverage/
+
+.DS_Store
+Thumbs.db
