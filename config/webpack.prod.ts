@@ -1,6 +1,6 @@
 import { merge } from 'webpack-merge';
+import CssMinimizerPlugin  from "css-minimizer-webpack-plugin";
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
 
@@ -13,8 +13,8 @@ const config: webpack.Configuration = {
       filename: '[name].[contenthash].css'
     })
   ],
-
   optimization: {
+    minimize: true,
     chunkIds: 'deterministic',
     minimizer: [
       new TerserPlugin({
@@ -27,15 +27,18 @@ const config: webpack.Configuration = {
           }
         }
       }),
-      new OptimizeCssAssetsPlugin({
-        cssProcessor: require('cssnano'),
-        cssProcessorOptions: {
-          discardComments: {
-            removeAll: true
-          }
+      new CssMinimizerPlugin({
+        parallel: true,
+        minimizerOptions: {
+          preset: [
+            "default",
+            {
+              discardComments: { removeAll: true },
+            },
+          ],
         },
-        canPrint: false
-      })
+        minify: CssMinimizerPlugin.cssnanoMinify,
+      }),
     ],
     splitChunks: {
       chunks: 'all',
